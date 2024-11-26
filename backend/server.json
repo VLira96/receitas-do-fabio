@@ -1,0 +1,49 @@
+{
+  "recipes": [
+    {
+      "id": "3",
+      "titulo": "Panqueca de Banana",
+      "detalhes": "Uma receita fácil e saudável para o café da manhã ou lanche.",
+      "tipo_refeicao": "Café da Manhã",
+      "num_para_servir": 2,
+      "nivel_dificuldade": "Fácil",
+      "lista_ingredientes": [
+        "2 bananas maduras",
+        "2 ovos",
+        "1/2 colher de chá de canela",
+        "1 colher de sopa de óleo de coco"
+      ]
+    },
+    {
+      "id": "4",
+      "titulo": "Lasanha de Berinjela",
+      "detalhes": "Uma opção leve e deliciosa para o almoço.",
+      "tipo_refeicao": "Almoço",
+      "num_para_servir": 4,
+      "nivel_dificuldade": "Médio",
+      "lista_ingredientes": [
+        "2 berinjelas grandes",
+        "300g de carne moída",
+        "1 xícara de molho de tomate",
+        "200g de queijo mussarela",
+        "1 colher de chá de azeite",
+        "Sal e pimenta a gosto"
+      ]
+    },
+    {
+      "id": "6",
+      "titulo": "Salada Caesar oi ",
+      "detalhes": "Uma salada clássica e saborosa para entradas ou refeições leves. oi ",
+      "tipo_refeicao": "Entrada oi ",
+      "num_para_servir": "3",
+      "nivel_dificuldade": "Medio",
+      "lista_ingredientes": [
+        "1 alface romana",
+        "50g de croutons",
+        "50g de queijo parmesão ralado",
+        "1 colher de sopa de azeite",
+        "2 colheres de sopa de molho Caesaroi"
+      ]
+    }
+  ]
+}

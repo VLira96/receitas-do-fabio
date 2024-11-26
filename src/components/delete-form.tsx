@@ -1,53 +1,75 @@
 "use client";
 
 import { useState } from "react";
-import { deleteReceita } from "./actions";  // Certifique-se de que o caminho para actions esteja correto.
-import { useFormStatus } from "react-dom";
 
-function DeleteButton() {
-    const { pending } = useFormStatus();
+const API_URL = "http://localhost:3032/recipes"; // URL do JSON Server
 
-    return (
-        <button type="submit" aria-disabled={pending}>
-            Delete Receita
-        </button>
-    );
+function DeleteButton({ isDeleting }: { isDeleting: boolean }) {
+  return (
+    <button
+      type="submit"
+      disabled={isDeleting}
+      className={`${
+        isDeleting ? "bg-red-300 cursor-not-allowed" : "bg-red-500"
+      } text-white rounded-full py-2 px-8 mt-4 transition-all ${
+        !isDeleting && "hover:bg-red-600"
+      } focus:outline-none`}
+    >
+      {isDeleting ? "Excluindo..." : "Excluir Receita"}
+    </button>
+  );
 }
 
-export function DeleteForm({ id, titulo }: { id: number; titulo: string }) {
-    // Estado para gerenciar a resposta da operação de exclusão
-    const [state, setState] = useState({
-        message: "",
+export function DeleteForm({ id, titulo }: { id: string; titulo: string }) {
+  const [state, setState] = useState({
+    message: "",
+    isDeleting: false,
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setState({ message: "", isDeleting: true });
+
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setState({
+          message: `Receita "${titulo}" excluída com sucesso.`,
+          isDeleting: false,
+        });
+      } else {
+        const errorMessage = await response.text();
+        setState({
+          message: `Falha ao excluir a receita: ${errorMessage}`,
+          isDeleting: false,
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao excluir receita:", error);
+      setState({
+        message: "Erro ao conectar-se ao servidor. Tente novamente mais tarde.",
         isDeleting: false,
-    });
+      });
+    }
+  };
 
-    // Função para enviar o pedido de exclusão
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        setState((prevState) => ({ ...prevState, isDeleting: true, message: "" }));
-
-        try {
-            // Chama a função deleteReceita com os dados necessários
-            const response = await deleteReceita(state, new FormData(e.target as HTMLFormElement));
-
-            setState({ message: response.message, isDeleting: false });
-        } catch (error) {
-            setState({ message: "Falha ao deletar receita", isDeleting: false });
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            {/* Usamos campos ocultos para passar os dados necessários */}
-            <input type="hidden" name="id" value={id} />
-            <input type="hidden" name="titulo" value={titulo} />
-
-            <DeleteButton />
-
-            <p aria-live="polite" className="sr-only" role="status">
-                {state.message}
-            </p>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      <DeleteButton isDeleting={state.isDeleting} />
+      <p
+        aria-live="polite"
+        className={`mt-4 text-sm ${
+          state.message.includes("sucesso")
+            ? "text-green-500"
+            : "text-red-500"
+        }`}
+      >
+        {state.message}
+      </p>
+    </form>
+  );
 }
